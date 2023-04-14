@@ -1,11 +1,18 @@
-export default class Log {
-  constructor(x, y, s) {
-    this.x = x;
-    this.y = y;
-    this.s = s;
+import Hitbox from "./hitbox.js";
+
+const canvasWidth = 550;
+const grid = 50;
+
+export default class Log extends Hitbox {
+  constructor(x, y, width, height, speed, size) {
+    super(x, y, width, height);
+    this.speed = speed;
+    this.size = size;
   }
 
-  draw(x, y, s) {
+  drawLog() {
+    let s = this.size;
+
     const logColor = {
       outline: "#61433d",
       darkBrown1: "#674f33",
@@ -15,8 +22,8 @@ export default class Log {
       hole: "#3d2b27",
     };
     push();
-    translate(x, y);
     noStroke();
+    translate(this.x, this.y);
 
     //mid brown parts
     fill(logColor.brown);
@@ -72,5 +79,15 @@ export default class Log {
     rect(400 * s, 30 * s, 20 * s, 40 * s);
     rect(400 * s, 20 * s, 10 * s, 60 * s);
     rect(390 * s, 40 * s, 10 * s, 30 * s);
+  }
+
+  update() {
+    this.x = this.x + this.speed;
+
+    if (this.speed > 0 && this.x > canvasWidth + grid) {
+      this.x = -this.width - grid;
+    } else if (this.speed < 0 && this.x < -this.width - grid) {
+      this.x = canvasWidth + grid;
+    }
   }
 }

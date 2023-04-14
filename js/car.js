@@ -1,13 +1,20 @@
-export default class Car {
-  constructor(x, y, s, color, speed) {
-    this.x = x;
-    this.y = y;
-    this.s = s;
-    this.color = color;
+import Hitbox from "./hitbox.js";
+
+const canvasWidth = 550;
+const grid = 50;
+
+export default class Car extends Hitbox {
+  constructor(x, y, width, height, speed, size, color) {
+    super(x, y, width, height);
     this.speed = speed;
+    this.size = size;
+    this.color = color;
   }
 
-  draw(x, y, s, color) {
+  draw() {
+    //fill(this.color);
+    //rect(this.x, this.y, this.width, this.height);
+
     const carColor = {
       outline: "#282828",
       windshield: "#93e7e8",
@@ -29,9 +36,11 @@ export default class Car {
       darkYellow: "#916c00",
     };
 
+    let s = this.size;
+
     push();
     noStroke();
-    translate(x, y);
+    translate(this.x, this.y);
 
     //outline
     fill(carColor.outline);
@@ -122,37 +131,19 @@ export default class Car {
     rect(270 * s, 60 * s, 20 * s, 10 * s);
 
     //random car color (red, blue or yellow)
-    let randomCarColor = color;
-    let lightCarColor;
-    let normalCarColor;
-    let darkCarColor;
-
-    // if (randomCarColor === 1) {
-    //   //red
-    //   lightCarColor = carColor.lightRed;
-    //   normalCarColor = carColor.red;
-    //   darkCarColor = carColor.darkRed;
-    //   console.log("red");
-    // } else if (randomCarColor === 2) {
-    //   //blue
-    //   lightCarColor = carColor.lightBlue;
-    //   normalCarColor = carColor.blue;
-    //   darkCarColor = carColor.darkBlue;
-    // } else if (randomCarColor === 3) {
-    //   //yellow
-    //   lightCarColor = carColor.lightYellow;
-    //   normalCarColor = carColor.yellow;
-    //   darkCarColor = carColor.darkYellow;
-    // }
+    let randomCarColor = this.color;
+    // let lightCarColor;
+    // let normalCarColor;
+    // let darkCarColor;
 
     //light parts of the car
-    if (randomCarColor === 1) {
+    if (randomCarColor === 0) {
       //red
       fill(carColor.lightRed);
-    } else if (randomCarColor === 2) {
+    } else if (randomCarColor === 1) {
       //blue
       fill(carColor.lightBlue);
-    } else if (randomCarColor === 3) {
+    } else if (randomCarColor === 2) {
       //yellow
       fill(carColor.lightYellow);
     }
@@ -179,13 +170,13 @@ export default class Car {
     rect(410 * s, 70 * s, 10 * s, 20 * s);
 
     //normal colored parts of the car
-    if (randomCarColor === 1) {
+    if (randomCarColor === 0) {
       //red
       fill(carColor.red);
-    } else if (randomCarColor === 2) {
+    } else if (randomCarColor === 1) {
       //blue
       fill(carColor.blue);
-    } else if (randomCarColor === 3) {
+    } else if (randomCarColor === 2) {
       //yellow
       fill(carColor.yellow);
     }
@@ -215,13 +206,13 @@ export default class Car {
     rect(430 * s, 60 * s, 10 * s, 120 * s);
 
     //dark colored parts of the car
-    if (randomCarColor === 1) {
+    if (randomCarColor === 0) {
       //red
       fill(carColor.darkRed);
-    } else if (randomCarColor === 2) {
+    } else if (randomCarColor === 1) {
       //blue
       fill(carColor.darkBlue);
-    } else if (randomCarColor === 3) {
+    } else if (randomCarColor === 2) {
       //yellow
       fill(carColor.darkYellow);
     }
@@ -247,5 +238,15 @@ export default class Car {
     rect(430 * s, 50 * s, 10 * s);
     rect(440 * s, 70 * s, 10 * s, 100 * s);
     pop();
+  }
+
+  update() {
+    this.x = this.x + this.speed;
+
+    if (this.speed > 0 && this.x > canvasWidth + grid) {
+      this.x = -this.width - grid;
+    } else if (this.speed < 0 && this.x < -this.width - grid) {
+      this.x = canvasWidth + grid;
+    }
   }
 }

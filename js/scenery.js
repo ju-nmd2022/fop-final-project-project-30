@@ -1,16 +1,19 @@
+const grid = 50;
+const canvasWidth = 550;
+
 export default class Scenery {
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.grassBlades = [];
     this.grassBladeSettings = {
-      amount: 2000,
+      amount: 3000,
       maxSize: 3,
     };
     this.waterBubbles = [];
     this.waterBubbleSettings = {
       amount: 200,
-      maxSize: 4,
+      maxSize: 5,
     };
   }
 
@@ -18,8 +21,8 @@ export default class Scenery {
     if (this.grassBlades.length < this.grassBladeSettings.amount) {
       for (let i = 0; i < this.grassBladeSettings.amount; i++) {
         const grassBlade = {
-          x: Math.floor(Math.random() * 500),
-          y: Math.floor(Math.random() * 500),
+          x: Math.floor(Math.random() * canvasWidth),
+          y: Math.floor(Math.random() * canvasWidth),
           size: Math.floor(Math.random() * this.grassBladeSettings.maxSize),
         };
         this.grassBlades.push(grassBlade);
@@ -31,8 +34,8 @@ export default class Scenery {
     if (this.waterBubbles.length < this.waterBubbleSettings.amount) {
       for (let i = 0; i < this.waterBubbleSettings.amount; i++) {
         const waterBubble = {
-          x: Math.floor(Math.random() * 500),
-          y: 82 + Math.floor(Math.random() * 135),
+          x: Math.floor(Math.random() * canvasWidth),
+          y: 5 + grid * 2 + Math.floor(Math.random() * (grid * 3 - 5)),
           size: Math.floor(Math.random() * this.waterBubbleSettings.maxSize),
           speed: 2,
         };
@@ -43,7 +46,6 @@ export default class Scenery {
 
   draw() {
     this.createGrass();
-    background("#FFF");
     const backgroundColor = {
       grass: "#9ab771",
       grassBlade: "#5F8575",
@@ -56,26 +58,32 @@ export default class Scenery {
 
     //GRASS
     fill(backgroundColor.grass);
-    rect(0, 430, 500, 70);
-    rect(0, 0, 500, 80);
-    rect(0, 290, 500, 70);
+    rect(0, grid * 9, canvasWidth, grid);
+    rect(0, grid * 5, canvasWidth, grid);
+    rect(0, 0, canvasWidth, grid * 2);
 
-    //grassBlades
+    this.grassBlades;
     for (let grassBlade of this.grassBlades) {
       fill(backgroundColor.grassBlade);
       rect(grassBlade.x, grassBlade.y, grassBlade.size);
     }
 
     //ROAD
+    push();
+    let strokeW = 1;
+    stroke("#FFF");
+    strokeWeight(strokeW);
     fill(backgroundColor.road);
-    rect(0, 360, 500, 70);
-    rect(0, 220, 500, 70);
+    rect(-strokeW, grid * 6, canvasWidth + strokeW * 2, grid);
+    rect(-strokeW, grid * 7, canvasWidth + strokeW * 2, grid);
+    rect(-strokeW, grid * 8, canvasWidth + strokeW * 2, grid);
+    //rect(-strokeWeight, 220, 500, 70);
+    pop();
     //texture the road
 
     //WATER
     fill(backgroundColor.water);
-    rect(0, 150, 500, 70);
-    rect(0, 80, 500, 70);
+    rect(0, grid * 2, canvasWidth, grid * 3);
 
     //waterBubbles
     this.createBubbles();
@@ -85,7 +93,7 @@ export default class Scenery {
 
       waterBubble.x = waterBubble.x + waterBubble.speed;
 
-      if (waterBubble.x > 500) {
+      if (waterBubble.x > canvasWidth) {
         waterBubble.x = 0;
       }
     }

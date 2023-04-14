@@ -1,11 +1,29 @@
-export default class Frog {
-  constructor(x, y, s) {
-    this.x = x;
-    this.y = y;
+import Hitbox from "./hitbox.js";
+
+//how do i get grid variable from game.js?
+const grid = 50;
+
+export default class Frog extends Hitbox {
+  constructor(x, y, width, s) {
+    super(x, y, width, width);
+    this.attached = null;
     this.size = s;
   }
 
-  draw(x, y, s) {
+  attach(log) {
+    this.attached = log;
+  }
+
+  update() {
+    if (this.attached !== null) {
+      this.x = this.x + this.attached.speed;
+    }
+  }
+
+  //draws the frog
+  draw() {
+    //fill(0, 255, 0);
+    //rect(this.x, this.y, this.width, this.width);
     const frogColor = {
       outline: "#21391f",
       darkGreen: "#476422",
@@ -15,10 +33,11 @@ export default class Frog {
       superLightGreen: "#b5e671",
     };
 
+    let s = this.size;
     //outline
     push();
     noStroke();
-    translate(x, y);
+    translate(this.x, this.y);
     fill(frogColor.outline);
     rect(0 * s, 20 * s, 10 * s);
     rect(10 * s, 10 * s, 10 * s);
@@ -262,5 +281,11 @@ export default class Frog {
     rect(170 * s, 30 * s, 20 * s, 10 * s);
     rect(190 * s, 40 * s, 10 * s);
     pop();
+  }
+
+  //moves with controls
+  move(xDirection, yDirection) {
+    this.x = this.x + xDirection * grid;
+    this.y = this.y + yDirection * grid;
   }
 }
