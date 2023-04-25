@@ -79,6 +79,7 @@ export default class Log extends Hitbox {
     rect(400 * s, 30 * s, 20 * s, 40 * s);
     rect(400 * s, 20 * s, 10 * s, 60 * s);
     rect(390 * s, 40 * s, 10 * s, 30 * s);
+    pop();
   }
 
   update() {

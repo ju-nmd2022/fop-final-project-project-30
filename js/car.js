@@ -1,20 +1,23 @@
 import Hitbox from "./hitbox.js";
+import { grid } from "./game.js";
 
 const canvasWidth = 550;
-const grid = 50;
+//const grid = 50;
 
 export default class Car extends Hitbox {
-  constructor(x, y, width, height, speed, size, color) {
+  constructor(x, y, width, height, speed, size, color, flipped) {
     super(x, y, width, height);
     this.speed = speed;
     this.size = size;
     this.color = color;
+    this.flipped = flipped;
+
+    // if (this.flipped === true) {
+    //   this.x = this.x - this.width;
+    // }
   }
 
   draw() {
-    //fill(this.color);
-    //rect(this.x, this.y, this.width, this.height);
-
     const carColor = {
       outline: "#282828",
       windshield: "#93e7e8",
@@ -41,6 +44,11 @@ export default class Car extends Hitbox {
     push();
     noStroke();
     translate(this.x, this.y);
+
+    //flipping if car is driving the other way
+    if (this.flipped === true) {
+      scale(-1, 1);
+    }
 
     //outline
     fill(carColor.outline);

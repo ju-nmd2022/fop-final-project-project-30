@@ -7,9 +7,8 @@
 //
 
 // Citations and references:
-//      0. inspiration for game: https://en.wikipedia.org/wiki/Frogger
-//      1. Formatting done by ChatGpt (boring repetitive tasks) and Prettier.
-//      2. ChatGPT helped with mirroring the pixel drawing of the frog (boring stuff really).
+//      1. Formatting done by ChatGpt (boring repetitive tasks, like reference 2) and Prettier.
+//      2. ChatGPT helped with mirroring the pixel drawing of the frog (boring and repetitive stuff really).
 //      3. Hitbox implementation based on: https://www.youtube.com/watch?v=06-ZvYmSeus
 //      4. Attaching the frogs to moving logs based on: https://www.youtube.com/watch?v=hk326ZHlENQ&t=0s
 //
@@ -21,12 +20,14 @@ import Log from "./log.js";
 import Scenery from "./scenery.js";
 
 //VARIABLES
+// class variables
 let frog;
-let grid = 50;
 let cars = [];
 let logs = [];
 let scenery;
 
+// general game variables
+export const grid = 50;
 const canvasWidth = 550;
 const canvasHeight = 500;
 
@@ -36,7 +37,7 @@ function resetGame() {
   frog = new Frog(
     canvasWidth / 2 - grid / 2,
     canvasHeight - grid + 10,
-    grid,
+    grid * 0.5,
     0.1
   );
 
@@ -76,14 +77,15 @@ function setup() {
       grid,
       row1speed,
       0.2,
-      Math.floor(Math.random() * 3)
+      Math.floor(Math.random() * 3),
+      false
     );
 
     index++;
   }
 
   //row 2 - cars
-  //here we need to find a way to rotate the cars
+  //here i need to find a way to rotate the cars
   const row2amount = 3;
   const row2gap = 200;
   const row2speed = -2.5;
@@ -99,7 +101,8 @@ function setup() {
       grid,
       row2speed,
       0.2,
-      Math.floor(Math.random() * 3)
+      Math.floor(Math.random() * 3),
+      true
     );
 
     index++;
@@ -121,7 +124,8 @@ function setup() {
       grid,
       row3speed,
       0.2,
-      Math.floor(Math.random() * 3)
+      Math.floor(Math.random() * 3),
+      false
     );
 
     index++;
@@ -140,7 +144,7 @@ function setup() {
 
     logs[index] = new Log(
       x,
-      height - grid * 6,
+      height - grid * 6 + 10,
       grid * row5Length,
       grid,
       row5speed,
@@ -161,7 +165,7 @@ function setup() {
 
     logs[index] = new Log(
       x,
-      height - grid * 7,
+      height - grid * 7 + 10,
       grid * row6Length,
       grid,
       row6speed,
@@ -182,7 +186,7 @@ function setup() {
 
     logs[index] = new Log(
       x,
-      height - grid * 8,
+      height - grid * 8 + 10,
       grid * row7Length,
       grid,
       row7speed,
@@ -211,8 +215,8 @@ function draw() {
 
   //logs
   for (let i = 0; i < logs.length; i++) {
-    //logs[i].update();
-    //logs[i].drawLog();
+    logs[i].update();
+    logs[i].drawLog();
   }
 
   //frog
