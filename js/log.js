@@ -1,7 +1,6 @@
 import Hitbox from "./hitbox.js";
-
-const canvasWidth = 550;
-const grid = 50;
+import { canvasWidth } from "./game.js";
+import { grid } from "./game.js";
 
 export default class Log extends Hitbox {
   constructor(x, y, width, height, speed, size) {

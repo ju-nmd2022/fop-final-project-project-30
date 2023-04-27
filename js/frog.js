@@ -1,7 +1,7 @@
 import Hitbox from "./hitbox.js";
-
-//how do i get grid variable from game.js?
-const grid = 50;
+import { grid } from "./game.js";
+import { canvasHeight } from "./game.js";
+import { canvasWidth } from "./game.js";
 
 export default class Frog extends Hitbox {
   constructor(x, y, width, s) {
@@ -282,10 +282,28 @@ export default class Frog extends Hitbox {
     rect(190 * s, 40 * s, 10 * s);
     pop();
   }
-
-  //moves with controls
+  //move with controls that prevents from leaving canvas (with some help from ChatGPT)
   move(xDirection, yDirection) {
-    this.x = this.x + xDirection * grid;
-    this.y = this.y + yDirection * grid;
+    // calculate the new x and y positions
+    let newX = this.x + xDirection * grid;
+    let newY = this.y + yDirection * grid;
+
+    // check if the new position is within the canvas boundaries
+    if (
+      newX - this.size / 2 >= 0 &&
+      newX + this.size / 2 <= canvasWidth &&
+      newY - this.size / 2 >= 0 &&
+      newY + this.size / 2 <= canvasHeight
+    ) {
+      // update the frog's position
+      this.x = newX;
+      this.y = newY;
+    }
+  }
+
+  checkForWin(winAreaX, winAreaY) {
+    if (this.y < 50) {
+      console.log("you won");
+    }
   }
 }

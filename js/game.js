@@ -11,6 +11,7 @@
 //      2. ChatGPT helped with mirroring the pixel drawing of the frog (boring and repetitive stuff really).
 //      3. Hitbox implementation based on: https://www.youtube.com/watch?v=06-ZvYmSeus
 //      4. Attaching the frogs to moving logs based on: https://www.youtube.com/watch?v=hk326ZHlENQ&t=0s
+//      5. ChatGPT helped me with the idea of using newX and newY in the Frog class to prevent the frog from leaving the canvas
 //
 
 //IMPORT
@@ -28,12 +29,19 @@ let scenery;
 
 // general game variables
 export const grid = 50;
-const canvasWidth = 550;
-const canvasHeight = 500;
+export const canvasWidth = 550;
+export const canvasHeight = 500;
+let countdown = 360;
+let score = 0;
+let gameIsActive = true;
+// let gameHas = true;
 
 //FUNCTIONS
 function resetGame() {
+  //resets background
   scenery = new Scenery(0, 0);
+
+  //resets frog
   frog = new Frog(
     canvasWidth / 2 - grid / 2,
     canvasHeight - grid + 10,
@@ -42,6 +50,12 @@ function resetGame() {
   );
 
   frog.attach(null);
+
+  //reset gameIsActive varaible
+  gameIsActive = true;
+
+  //reset countdown
+  countdown = 360;
 }
 
 function gameOver() {
@@ -87,7 +101,7 @@ function setup() {
   //row 2 - cars
   //here i need to find a way to rotate the cars
   const row2amount = 3;
-  const row2gap = 200;
+  const row2gap = 300;
   const row2speed = -2.5;
   const row2Length = 2;
 
@@ -239,6 +253,27 @@ function draw() {
 
   frog.update();
   frog.draw();
+
+  //text
+  push();
+  fill("#FFF");
+  textSize(18);
+  text("time: " + Math.round(countdown / 36) + "s", 470, 20);
+  text("score: " + score + "p", 20, 20);
+  pop();
+
+  //game mechanics
+  if (gameIsActive === true) {
+    countdown = countdown - 1;
+  }
+
+  if (countdown < 0) {
+    gameIsActive = false;
+    gameOver();
+    resetGame();
+  }
+
+  frog.checkForWin(canvasWidth, 100);
 }
 window.draw = draw;
 
