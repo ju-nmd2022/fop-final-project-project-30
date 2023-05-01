@@ -1,5 +1,6 @@
-const grid = 50;
-const canvasWidth = 550;
+//variable imports
+import { canvasWidth } from "./game.js";
+import { grid } from "./game.js";
 
 export default class Scenery {
   constructor(x, y) {

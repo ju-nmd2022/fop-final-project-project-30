@@ -1,4 +1,6 @@
 import Hitbox from "./hitbox.js";
+
+//variable imports
 import { canvasWidth } from "./game.js";
 import { grid } from "./game.js";
 

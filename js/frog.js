@@ -1,7 +1,10 @@
 import Hitbox from "./hitbox.js";
+
+//variable imports
 import { grid } from "./game.js";
 import { canvasHeight } from "./game.js";
 import { canvasWidth } from "./game.js";
+import { gameWon } from "./game.js";
 
 export default class Frog extends Hitbox {
   constructor(x, y, width, s) {
@@ -304,6 +307,7 @@ export default class Frog extends Hitbox {
   checkForWin(winAreaX, winAreaY) {
     if (this.y < 50) {
       console.log("you won");
+      gameWon();
     }
   }
 }

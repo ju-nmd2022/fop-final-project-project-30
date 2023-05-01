@@ -33,6 +33,7 @@ export const canvasWidth = 550;
 export const canvasHeight = 500;
 let countdown = 360;
 let score = 0;
+let level = 1;
 let gameIsActive = true;
 // let gameHas = true;
 
@@ -62,34 +63,42 @@ function gameOver() {
   resetGame();
   console.log("Game Over");
   //show an game over screen with highscore and stuff
+  score = 0;
+  level = 0;
+}
+
+export function gameWon() {
+  score = score + 100;
+  level = level + 1;
+  resetGame();
 }
 
 //SETUP
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   frameRate(30);
-
   resetGame();
 
   let index = 0;
+  //initializes a variable to keep track of the position in
+  //the arrays where new objects are added, starting from the beginning of the array
 
   //row 1 - cars
-  //would be nice to make an object out of this for each lane
-  //maybe even add a function for creating a lane
-  const row1amount = 2;
-  const row1gap = 300;
-  const row1speed = 2;
-  const row1Length = 2;
-
-  for (let i = 0; i < row1amount; i++) {
-    let x = i * row1gap;
+  let row1 = {
+    amount: 2,
+    gap: 300,
+    speed: 2 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row1.amount; i++) {
+    let x = i * row1.gap;
 
     cars[index] = new Car(
       x,
       height - grid * 2,
-      grid * row1Length,
+      grid * row1.length,
       grid,
-      row1speed,
+      row1.speed,
       0.2,
       Math.floor(Math.random() * 3),
       false
@@ -98,22 +107,22 @@ function setup() {
     index++;
   }
 
-  //row 2 - cars
-  //here i need to find a way to rotate the cars
-  const row2amount = 3;
-  const row2gap = 300;
-  const row2speed = -2.5;
-  const row2Length = 2;
-
-  for (let i = 0; i < row2amount; i++) {
-    let x = i * row2gap;
+  //row 2 - cars (rotated)
+  let row2 = {
+    amount: 3,
+    gap: 300,
+    speed: -2.5 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row2.amount; i++) {
+    let x = i * row2.gap;
 
     cars[index] = new Car(
       x,
       height - grid * 3,
-      grid * row2Length,
+      grid * row2.length,
       grid,
-      row2speed,
+      row2.speed,
       0.2,
       Math.floor(Math.random() * 3),
       true
@@ -123,20 +132,21 @@ function setup() {
   }
 
   //row 3 - cars
-  const row3amount = 3;
-  const row3gap = 250;
-  const row3speed = 2.5;
-  const row3Length = 2;
-
-  for (let i = 0; i < row3amount; i++) {
-    let x = i * row3gap;
+  let row3 = {
+    amount: 3,
+    gap: 250,
+    speed: 2.5 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row3.amount; i++) {
+    let x = i * row3.gap;
 
     cars[index] = new Car(
       x,
       height - grid * 4,
-      grid * row3Length,
+      grid * row3.length,
       grid,
-      row3speed,
+      row3.speed,
       0.2,
       Math.floor(Math.random() * 3),
       false
@@ -145,23 +155,26 @@ function setup() {
     index++;
   }
 
+  //row 4 - empty
+
   index = 0;
 
   //row 5 - logs
-  const row5amount = 3;
-  const row5gap = 200;
-  const row5speed = 3.2;
-  const row5Length = 2;
-
-  for (let i = 0; i < row5amount; i++) {
-    let x = i * row5gap;
+  let row5 = {
+    amount: 3,
+    gap: 200,
+    speed: 3.2 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row5.amount; i++) {
+    let x = i * row5.gap;
 
     logs[index] = new Log(
       x,
       height - grid * 6 + 10,
-      grid * row5Length,
+      grid * row5.length,
       grid,
-      row5speed,
+      row5.speed,
       0.2
     );
 
@@ -169,20 +182,21 @@ function setup() {
   }
 
   //row 6 - logs
-  const row6amount = 3;
-  const row6gap = 180;
-  const row6speed = -1.8;
-  const row6Length = 2;
-
-  for (let i = 0; i < row6amount; i++) {
-    let x = i * row6gap;
+  let row6 = {
+    amount: 3,
+    gap: 180,
+    speed: -1.8 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row6.amount; i++) {
+    let x = i * row6.gap;
 
     logs[index] = new Log(
       x,
       height - grid * 7 + 10,
-      grid * row6Length,
+      grid * row6.length,
       grid,
-      row6speed,
+      row6.speed,
       0.2
     );
 
@@ -190,20 +204,21 @@ function setup() {
   }
 
   //row 7 - logs
-  const row7amount = 3;
-  const row7gap = 280;
-  const row7speed = 4.2;
-  const row7Length = 2;
-
-  for (let i = 0; i < row7amount; i++) {
-    let x = i * row7gap;
+  let row7 = {
+    amount: 3,
+    gap: 280,
+    speed: 4.2 * level,
+    length: 2,
+  };
+  for (let i = 0; i < row7.amount; i++) {
+    let x = i * row7.gap;
 
     logs[index] = new Log(
       x,
       height - grid * 8 + 10,
-      grid * row7Length,
+      grid * row7.length,
       grid,
-      row7speed,
+      row7.speed,
       0.2
     );
 
@@ -216,6 +231,7 @@ window.setup = setup;
 function draw() {
   //general
   scenery.draw();
+  console.log(level);
 
   //cars
   for (let i = 0; i < cars.length; i++) {
