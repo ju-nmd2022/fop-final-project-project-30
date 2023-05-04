@@ -21,7 +21,45 @@ let countdown = 360;
 let score = 0;
 let level = 1;
 let gameIsActive = true;
-// let gameHas = true;
+
+//row objects
+let row1 = {
+  amount: 2,
+  gap: 300,
+  speed: 2 * level,
+  length: 2,
+};
+let row2 = {
+  amount: 3,
+  gap: 300,
+  speed: -2.5 * level,
+  length: 2,
+};
+let row3 = {
+  amount: 3,
+  gap: 250,
+  speed: 2.5 * level,
+  length: 2,
+};
+//row4 is empty
+let row5 = {
+  amount: 3,
+  gap: 200,
+  speed: 3.2 * level,
+  length: 2,
+};
+let row6 = {
+  amount: 3,
+  gap: 180,
+  speed: -1.8 * level,
+  length: 2,
+};
+let row7 = {
+  amount: 3,
+  gap: 280,
+  speed: 4.2 * level,
+  length: 2,
+};
 
 //FUNCTIONS
 function resetGame() {
@@ -43,39 +81,44 @@ function resetGame() {
 
   //reset countdown
   countdown = 360;
+
+  //updates the speeds of the logs and cars depending on level
+  updateObjectSpeed();
+
+  //updates cars and logs (so we can change the speed depending on level)
+  updateCars();
+  updateLogs();
 }
 
 function gameOver() {
-  resetGame();
   console.log("Game Over");
   //show an game over screen with highscore and stuff
   score = 0;
-  level = 0;
+  level = 1;
+  resetGame();
 }
 
 export function gameWon() {
   score = score + 100;
-  level = level + 1;
+  level = level + 0.15;
   resetGame();
 }
 
-//SETUP
-function setup() {
-  createCanvas(canvasWidth, canvasHeight);
-  frameRate(30);
-  resetGame();
+function updateObjectSpeed() {
+  row1.speed = 2 * level;
+  row2.speed = -2.5 * level;
+  row3.speed = 2.5 * level;
+  row5.speed = 3.2 * level;
+  row6.speed = -1.8 * level;
+  row7.speed = 4.2 * level;
+}
 
+function spawnCars() {
   let index = 0;
   //initializes a variable to keep track of the position in
   //the arrays where new objects are added, starting from the beginning of the array
 
   //row 1 - cars
-  let row1 = {
-    amount: 2,
-    gap: 300,
-    speed: 2 * level,
-    length: 2,
-  };
   for (let i = 0; i < row1.amount; i++) {
     let x = i * row1.gap;
 
@@ -94,12 +137,6 @@ function setup() {
   }
 
   //row 2 - cars (rotated)
-  let row2 = {
-    amount: 3,
-    gap: 300,
-    speed: -2.5 * level,
-    length: 2,
-  };
   for (let i = 0; i < row2.amount; i++) {
     let x = i * row2.gap;
 
@@ -118,12 +155,6 @@ function setup() {
   }
 
   //row 3 - cars
-  let row3 = {
-    amount: 3,
-    gap: 250,
-    speed: 2.5 * level,
-    length: 2,
-  };
   for (let i = 0; i < row3.amount; i++) {
     let x = i * row3.gap;
 
@@ -140,18 +171,12 @@ function setup() {
 
     index++;
   }
+}
 
-  //row 4 - empty
-
-  index = 0;
+function spawnLogs() {
+  let index = 0;
 
   //row 5 - logs
-  let row5 = {
-    amount: 3,
-    gap: 200,
-    speed: 3.2 * level,
-    length: 2,
-  };
   for (let i = 0; i < row5.amount; i++) {
     let x = i * row5.gap;
 
@@ -168,12 +193,6 @@ function setup() {
   }
 
   //row 6 - logs
-  let row6 = {
-    amount: 3,
-    gap: 180,
-    speed: -1.8 * level,
-    length: 2,
-  };
   for (let i = 0; i < row6.amount; i++) {
     let x = i * row6.gap;
 
@@ -190,12 +209,6 @@ function setup() {
   }
 
   //row 7 - logs
-  let row7 = {
-    amount: 3,
-    gap: 280,
-    speed: 4.2 * level,
-    length: 2,
-  };
   for (let i = 0; i < row7.amount; i++) {
     let x = i * row7.gap;
 
@@ -211,13 +224,35 @@ function setup() {
     index++;
   }
 }
+
+function updateCars() {
+  cars = [];
+  spawnCars();
+}
+
+function updateLogs() {
+  logs = [];
+  spawnLogs();
+}
+
+//SETUP
+function setup() {
+  createCanvas(canvasWidth, canvasHeight);
+  frameRate(30);
+  resetGame();
+
+  spawnCars();
+
+  //row 4 - empty
+
+  spawnLogs();
+}
 window.setup = setup;
 
 //DRAW FUNCTION
 function draw() {
   //general
   scenery.draw();
-  console.log(level);
 
   //cars
   for (let i = 0; i < cars.length; i++) {
