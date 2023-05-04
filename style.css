@@ -1,6 +1,11 @@
 body {
-  background-color: darkgreen;
+  background-image: url(./background.png);
+  background-repeat: no-repeat, repeat;
+  background-size: 105vw;
   overflow: hidden;
+  font-family: "VT323", Helvetica, Arial, sans-serif;
+  color: white;
+  font-size: 2rem;
 }
 
 main {
@@ -10,11 +15,29 @@ main {
 }
 
 img {
+  margin-top: 5px;
   width: 200px;
 }
 
 canvas {
-  margin-top: 100px;
+  margin-top: 60px;
   border-radius: 10px;
-  border: solid 20px rgb(87, 59, 39);
+  border: solid 5px rgb(76, 57, 44);
+  /* box shadow from https://cssgenerator.org/box-shadow-css-generator.html */
+  box-shadow: -2px -2px 148px -3px rgba(0, 0, 0, 1);
+  -webkit-box-shadow: -2px -2px 148px -3px rgba(0, 0, 0, 1);
+  -moz-box-shadow: -2px -2px 148px -3px rgba(0, 0, 0, 1);
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-text {
+  margin-top: 25px;
+  font-family: "VT323", Helvetica, Arial, sans-serif;
+  color: white;
+  font-size: 1rem;
 }
