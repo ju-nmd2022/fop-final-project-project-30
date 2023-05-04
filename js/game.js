@@ -1,16 +1,16 @@
 //citations and introduction is in readme
 
-//IMPORT
-import Frog from "./frog.js";
-import Car from "./car.js";
-import Log from "./log.js";
-import Scenery from "./scenery.js";
-
 //loading fonts
 let pixelFont;
 function preload() {
   pixelFont = loadFont("Assets/VT323/VT323-Regular.ttf");
 }
+
+//IMPORT
+import Frog from "./frog.js";
+import Car from "./car.js";
+import Log from "./log.js";
+import Scenery from "./scenery.js";
 
 //VARIABLES
 // class variables
@@ -27,6 +27,13 @@ let countdown = 360;
 let score = 0;
 let level = 1;
 let gameIsActive = true;
+
+//game states
+let gameState = 1;
+//1 = Start screen
+//2 = Game is Active
+//3 = Game Over - Ran over or drowned
+//4 = Game Over - Ran out of time
 
 //row objects
 let row1 = {
@@ -67,7 +74,7 @@ let row7 = {
   length: 2,
 };
 
-//FUNCTIONS
+//GAME FUNCTIONS
 function resetGame() {
   //resets background
   scenery = new Scenery(0, 0);
@@ -97,9 +104,9 @@ function resetGame() {
 }
 
 function gameOver() {
+  gameState = 3;
   console.log("Game Over");
   //show an game over screen with highscore and stuff
-  score = 0;
   level = 1;
   resetGame();
 }
@@ -241,7 +248,86 @@ function updateLogs() {
   spawnLogs();
 }
 
-//SETUP
+function screenBackground() {
+  scenery.draw();
+  //cars
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].update();
+    cars[i].draw();
+
+    if (frog.overlaps(cars[i])) {
+      gameOver();
+    }
+  }
+
+  //logs
+  for (let i = 0; i < logs.length; i++) {
+    logs[i].update();
+    logs[i].drawLog();
+  }
+  //Start Screen
+  push();
+  fill(0, 0, 0, 200);
+  rect(0, 0, canvasWidth, canvasHeight);
+  pop();
+}
+
+function startingScreen() {
+  screenBackground();
+
+  push();
+  fill("#FFF");
+  textFont(pixelFont);
+  textAlign(CENTER);
+  textSize(46);
+  text("Welcome to Frogger", canvasWidth / 2, canvasHeight / 2 - 20);
+  textSize(16);
+  text(
+    "Press any Key to Start, Good Luck!",
+    canvasWidth / 2,
+    canvasHeight / 2 + 10
+  );
+  pop();
+}
+
+function gameOverScreen() {
+  screenBackground();
+
+  push();
+  fill("#FFF");
+  textFont(pixelFont);
+  textAlign(CENTER);
+  textSize(46);
+  text("Game Over", canvasWidth / 2, canvasHeight / 2 - 20);
+  textSize(16);
+  text(
+    "Your score was " + score + ", try again!",
+    canvasWidth / 2,
+    canvasHeight / 2 + 10
+  );
+  pop();
+}
+
+function ranOutOfTimeScreen() {
+  screenBackground();
+
+  push();
+  fill("#FFF");
+  textFont(pixelFont);
+  textAlign(CENTER);
+  textSize(46);
+  text("Game Over", canvasWidth / 2, canvasHeight / 2 - 20);
+  textSize(16);
+  text("You ran out of time :(", canvasWidth / 2, canvasHeight / 2 + 10);
+  text(
+    "Your score was " + score + ", try again!",
+    canvasWidth / 2,
+    canvasHeight / 2 + 30
+  );
+  pop();
+}
+
+//SETUP FUNCTION
 function setup() {
   preload();
   createCanvas(canvasWidth, canvasHeight);
@@ -258,67 +344,75 @@ window.setup = setup;
 
 //DRAW FUNCTION
 function draw() {
-  //general
-  scenery.draw();
+  if (gameState === 1) {
+    startingScreen();
+  } else if (gameState === 2) {
+    //general
+    scenery.draw();
 
-  //cars
-  for (let i = 0; i < cars.length; i++) {
-    cars[i].update();
-    cars[i].draw();
+    //cars
+    for (let i = 0; i < cars.length; i++) {
+      cars[i].update();
+      cars[i].draw();
 
-    if (frog.overlaps(cars[i])) {
-      gameOver();
-    }
-  }
-
-  //logs
-  for (let i = 0; i < logs.length; i++) {
-    logs[i].update();
-    logs[i].drawLog();
-  }
-
-  //frog
-  if (frog.y < height - grid * 5 && frog.y > grid * 2) {
-    let safe = false;
-
-    for (let i = 0; i < logs.length; i++) {
-      if (frog.overlaps(logs[i])) {
-        safe = true;
-        frog.attach(logs[i]);
+      if (frog.overlaps(cars[i])) {
+        gameOver();
       }
     }
 
-    if (!safe) {
-      gameOver();
+    //logs
+    for (let i = 0; i < logs.length; i++) {
+      logs[i].update();
+      logs[i].drawLog();
     }
-  } else {
-    frog.attach(null);
+
+    //frog
+    if (frog.y < height - grid * 5 && frog.y > grid * 2) {
+      let safe = false;
+
+      for (let i = 0; i < logs.length; i++) {
+        if (frog.overlaps(logs[i])) {
+          safe = true;
+          frog.attach(logs[i]);
+        }
+      }
+
+      if (!safe) {
+        gameOver();
+      }
+    } else {
+      frog.attach(null);
+    }
+
+    frog.update();
+    frog.draw();
+
+    //text
+    push();
+    fill("#FFF");
+    textFont(pixelFont);
+    textSize(24);
+    text("time: " + Math.round(countdown / 36) + "s", 450, 25);
+    text("score: " + score + "p", 20, 25);
+    pop();
+
+    //game mechanics
+    if (gameIsActive === true) {
+      countdown = countdown - 1;
+    }
+
+    if (countdown < 0) {
+      gameIsActive = false;
+      gameState = 4;
+      resetGame();
+    }
+
+    frog.checkForWin(canvasWidth, 100);
+  } else if (gameState === 3) {
+    gameOverScreen();
+  } else if (gameState === 4) {
+    ranOutOfTimeScreen();
   }
-
-  frog.update();
-  frog.draw();
-
-  //text
-  push();
-  fill("#FFF");
-  textFont(pixelFont);
-  textSize(24);
-  text("time: " + Math.round(countdown / 36) + "s", 450, 25);
-  text("score: " + score + "p", 20, 25);
-  pop();
-
-  //game mechanics
-  if (gameIsActive === true) {
-    countdown = countdown - 1;
-  }
-
-  if (countdown < 0) {
-    gameIsActive = false;
-    gameOver();
-    resetGame();
-  }
-
-  frog.checkForWin(canvasWidth, 100);
 }
 window.draw = draw;
 
@@ -332,6 +426,20 @@ function keyPressed() {
     frog.move(0, -1);
   } else if (keyCode === DOWN_ARROW || keyCode === 83) {
     frog.move(0, 1);
+  }
+
+  if (gameState === 1 || keyCode === 32) {
+    gameState = 2;
+  }
+
+  if (gameState === 3 || keyCode === 32) {
+    gameState = 2;
+    score = 0;
+  }
+
+  if (gameState === 4 || keyCode === 32) {
+    gameState = 2;
+    score = 0;
   }
 }
 window.keyPressed = keyPressed;

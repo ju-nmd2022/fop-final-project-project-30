@@ -1,7 +1,7 @@
-Frogger Game by Liam Melkersson
-Course: Foundations of Programming
-Teacher: Garrit Schaap
-Jönköping University - 2023
+Frogger Game by Liam Melkersson.
+Course: Foundations of Programming.
+Teacher: Garrit Schaap.
+Jönköping University - 2023.
 
 Hi! Welcome to my Frogger game, a modern take on the classic arcade game.
 In this game, the player must navigate a frog through various obstacles
@@ -14,5 +14,6 @@ Citations and references:
 3. Hitbox implementation based on: https://www.youtube.com/watch?v=06-ZvYmSeus
 4. Attaching the frogs to moving logs based on: https://www.youtube.com/watch?v=hk326ZHlENQ&t=0s
 5. ChatGPT helped me with the idea of using newX and newY in the Frog class to prevent the frog from leaving the canvas
+6. Font from https://fonts.google.com/specimen/VT323
 
 Thanks for playing <3
