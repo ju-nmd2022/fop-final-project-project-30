@@ -6,6 +6,12 @@ import Car from "./car.js";
 import Log from "./log.js";
 import Scenery from "./scenery.js";
 
+//loading fonts
+let pixelFont;
+function preload() {
+  pixelFont = loadFont("Assets/VT323/VT323-Regular.ttf");
+}
+
 //VARIABLES
 // class variables
 let frog;
@@ -237,6 +243,7 @@ function updateLogs() {
 
 //SETUP
 function setup() {
+  preload();
   createCanvas(canvasWidth, canvasHeight);
   frameRate(30);
   resetGame();
@@ -294,9 +301,10 @@ function draw() {
   //text
   push();
   fill("#FFF");
-  textSize(18);
-  text("time: " + Math.round(countdown / 36) + "s", 470, 20);
-  text("score: " + score + "p", 20, 20);
+  textFont(pixelFont);
+  textSize(24);
+  text("time: " + Math.round(countdown / 36) + "s", 450, 25);
+  text("score: " + score + "p", 20, 25);
   pop();
 
   //game mechanics
