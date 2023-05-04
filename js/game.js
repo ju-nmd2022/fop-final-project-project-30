@@ -248,6 +248,7 @@ function updateLogs() {
   spawnLogs();
 }
 
+//base for the screen with text (starting screen and game over screen)
 function screenBackground() {
   scenery.draw();
   //cars
@@ -283,7 +284,7 @@ function startingScreen() {
   text("Welcome to Frogger", canvasWidth / 2, canvasHeight / 2 - 20);
   textSize(16);
   text(
-    "Press any Key to Start, Good Luck!",
+    "Press Spacebar to Start, Good Luck!",
     canvasWidth / 2,
     canvasHeight / 2 + 10
   );
@@ -305,6 +306,7 @@ function gameOverScreen() {
     canvasWidth / 2,
     canvasHeight / 2 + 10
   );
+  text("Press Spacebar to Restart", canvasWidth / 2, canvasHeight / 2 + 30);
   pop();
 }
 
@@ -324,6 +326,7 @@ function ranOutOfTimeScreen() {
     canvasWidth / 2,
     canvasHeight / 2 + 30
   );
+  text("Press Spacebar to Restart", canvasWidth / 2, canvasHeight / 2 + 50);
   pop();
 }
 
@@ -418,26 +421,28 @@ window.draw = draw;
 
 //CONTROLS
 function keyPressed() {
-  if (keyCode === LEFT_ARROW || keyCode === 65) {
-    frog.move(-1, 0);
-  } else if (keyCode === RIGHT_ARROW || keyCode === 68) {
-    frog.move(1, 0);
-  } else if (keyCode === UP_ARROW || keyCode === 87) {
-    frog.move(0, -1);
-  } else if (keyCode === DOWN_ARROW || keyCode === 83) {
-    frog.move(0, 1);
-  }
-
-  if (gameState === 1 || keyCode === 32) {
+  if (gameState === 1 && keyCode === 32) {
     gameState = 2;
   }
 
-  if (gameState === 3 || keyCode === 32) {
+  if (gameState === 2) {
+    if (keyCode === LEFT_ARROW || keyCode === 65) {
+      frog.move(-1, 0);
+    } else if (keyCode === RIGHT_ARROW || keyCode === 68) {
+      frog.move(1, 0);
+    } else if (keyCode === UP_ARROW || keyCode === 87) {
+      frog.move(0, -1);
+    } else if (keyCode === DOWN_ARROW || keyCode === 83) {
+      frog.move(0, 1);
+    }
+  }
+  console.log(keyCode);
+  if (gameState === 3 && keyCode === 32) {
     gameState = 2;
     score = 0;
   }
 
-  if (gameState === 4 || keyCode === 32) {
+  if (gameState === 4 && keyCode === 32) {
     gameState = 2;
     score = 0;
   }
