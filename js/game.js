@@ -196,7 +196,7 @@ function spawnLogs() {
     logs[index] = new Log(
       x,
       height - grid * 6 + 10,
-      grid * row5.length,
+      grid * row5.length - 25,
       grid,
       row5.speed,
       0.2
@@ -212,7 +212,7 @@ function spawnLogs() {
     logs[index] = new Log(
       x,
       height - grid * 7 + 10,
-      grid * row6.length,
+      grid * row6.length - 25,
       grid,
       row6.speed,
       0.2
@@ -228,7 +228,7 @@ function spawnLogs() {
     logs[index] = new Log(
       x,
       height - grid * 8 + 10,
-      grid * row7.length,
+      grid * row7.length - 25,
       grid,
       row7.speed,
       0.2
