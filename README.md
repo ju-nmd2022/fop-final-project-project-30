@@ -1,4 +1,4 @@
-# Frogger Game
+# Frogger Game 🐸
 
 ## Introduction
 
